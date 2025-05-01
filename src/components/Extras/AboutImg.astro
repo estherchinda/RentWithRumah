@@ -1,0 +1,42 @@
+---
+import Taija from "../../assets/taija.png";
+import Vondra from "../../assets/vondra.png";
+import { Image } from "astro:assets";
+---
+
+
+
+
+<div
+class="w-full px-4 py-10 flex flex-col items-center md:flex-row md:justify-center md:gap-28"
+>
+
+<div
+  class="relative w-[300px] h-[380px] md:w-[350px] md:h-[450px] overflow-hidden md:translate-y-10"
+>
+  <Image
+    src={Vondra}
+    alt="Annas lodge"
+    class="w-full h-full object-cover"
+  />
+  <div class="absolute top-4 left-4 text-white">
+    <h2 class="text-lg font-semibold">Annas lodge</h2>
+    <p class="text-sm">Johannesburg, South African</p>
+  </div>
+</div>
+
+<!-- Card 2: Higher on desktop -->
+<div
+  class="relative w-[300px] h-[380px] md:w-[350px] md:h-[450px] overflow-hidden mt-8 md:mt-0 md:-translate-y-5"
+>
+  <Image
+    src={Taija}
+    alt="Taji palace"
+    class="w-full h-full object-cover"
+  />
+  <div class="absolute top-4 left-4 text-white">
+    <h2 class="text-lg font-semibold">Taji palace</h2>
+    <p class="text-sm">Kolkata, India</p>
+  </div>
+</div>
+</div>

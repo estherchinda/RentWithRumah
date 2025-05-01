@@ -1,0 +1,37 @@
+---
+import Landscape from '../assets/landscape-bg.png';
+import { Image } from "astro:assets";
+---
+
+<div class="relative w-full bg-white py-20">
+  <section class="flex flex-col items-center justify-center gap-6 text-center px-4">
+    <h1 class="text-[35px] font-medium leading-[45px] tracking-tight md:text-[58px]">
+      The power of variety
+    </h1>
+
+    <span class="text-[16px] text-[#A3A3A3] md:text-[24px] leading-relaxed">
+      Find your choices based on color,
+      <br class="md:hidden" />
+      ambience and residency, with lower
+      <br />
+      budget and easier systems at your
+      <br class="md:hidden" /> doorstep.
+    </span>
+
+    <div class="relative w-[342px]  h-[512px] overflow-hidden rounded-[18px] md:w-[1066px] md:h-[612px]">
+      <Image
+        src={Landscape}
+        alt="Desktop hero background"
+        class="w-full h-full object-cover rounded-[20px]"
+      />
+    </div>
+    
+
+    <!-- Slide Indicators -->
+    <div class="flex justify-center space-x-2">
+      <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
+      <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+      <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
+    </div>
+  </section>
+</div>

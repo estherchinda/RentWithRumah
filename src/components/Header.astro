@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets";
+import Rumah from "../assets/rumah.png";
+
+// Determine if it's the About page
+const isAbout = Astro.url.pathname === "/about";
+---
+
+<nav class={`absolute top-0 left-0 w-full z-30 flex items-center justify-between p-4 md:mt-6 ${isAbout ? 'text-black' : 'text-white'}`}>
+  <!-- Logo -->
+  <a href="/" class="flex pl-12 items-center gap-2">
+    <img 
+      src="/logo.png" 
+      alt="Rumah Logo" 
+      class={`w-16 h-16 p-1 rounded-full ${isAbout ? 'border border-black' : ''}`} 
+    />
+    {!isAbout && (
+      <span class="hidden md:inline">
+        <Image src={Rumah} alt="Annas lodge" />
+      </span>
+    )}
+  </a>
+
+  <!-- Desktop Navigation -->
+  <ul class={`hidden pr-12 md:flex items-center gap-12 text-[17px] ${isAbout ? 'text-black' : 'text-white'}`}>
+    <li><a href="#">Explore</a></li>
+    <li><a href="#">Careers</a></li>
+    <li><a href="/about">About Us</a></li>
+  </ul>
+
+  <!-- Hamburger Button -->
+  <button id="hamburger-btn" class="flex flex-col gap-1 md:hidden">
+    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-black' : 'bg-white'}`}></span>
+    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-black' : 'bg-white'}`}></span>
+    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-black' : 'bg-white'}`}></span>
+  </button>
+
+  <!-- Mobile Menu -->
+  <div 
+    id="mobile-menu"
+    class="hidden absolute top-20 left-4 right-4 bg-[#FDF9ED]  text-black p-6 rounded-xl shadow-lg flex flex-col gap-4 md:hidden transition-all duration-300 ease-in-out"
+  >
+    <a href="#" class="hover:underline">Explore</a>
+    <a href="#" class="hover:underline">Careers</a>
+    <a href="/about" class="hover:underline">About Us</a>
+  </div>
+</nav>
+
+<!-- Toggle Script -->
+<script is:client>
+  const btn = document.getElementById("hamburger-btn");
+  const menu = document.getElementById("mobile-menu");
+
+  btn?.addEventListener("click", () => {
+    menu?.classList.toggle("hidden");
+  });
+</script>

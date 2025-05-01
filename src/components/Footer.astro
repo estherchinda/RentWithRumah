@@ -1,0 +1,68 @@
+---
+import { Image } from "astro:assets";
+import SqLogo from '../assets/Group-24.png';
+import Earth from '../assets/proicons_globe.png';
+---
+<footer class="bg-[#445B38] text-[#FDF9ED] px-6 py-12 relative">
+  
+    <!-- Make this absolute inside the parent -->
+    <div class="absolute top-12 left-6 md:left-12 md:top-32">
+      <Image
+        src={SqLogo}
+        alt="Annas lodge"
+        class="w-[153.47px] h-[60px] object-cover"
+      />
+    </div>
+  
+    <!-- Grid Layout -->
+    <div class="flex flex-col gap-10 text-[20px] max-w-4xl mx-auto md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-20 mt-24 md:mt-24">
+      <!-- Column 1: About -->
+      <div class="space-y-2">
+        <h4 class="font-[400] mb-4">About</h4>
+        <p class="font-[300]">About us</p>
+        <p class="font-[300]">Careers</p>
+        <p class="font-[300]">FAQ</p>
+      </div>
+  
+      <!-- Column 2: Legal -->
+      <div class="space-y-2">
+        <h4 class="font-[400] mb-4">Legal</h4>
+        <p class="font-[300]">Cookies preferences</p>
+        <p class="font-[300]">Cookies Policy</p>
+        <p class="font-[300]">FAQ</p>
+      </div>
+  
+      <!-- Column 3: Rumah -->
+      <div class="space-y-2">
+        <h4 class="font-[400] mb-4">Rumah</h4>
+        <p class="font-[300]">Firstbuild Avenue,</p>
+        <p class="font-[300]">Port Harcourt, Rivers state,</p>
+        <p class="font-[300]">Nigeria</p>
+      </div>
+  
+      <!-- Column 4: Connect -->
+      <div class="space-y-2">
+        <h4 class="font-[400] mb-4">Connect</h4>
+        <p class="font-[300]">Instagram</p>
+        <p class="font-[300]">LinkedIn</p>
+        <p class="font-[300]">Twitter(X)</p>
+      </div>
+    </div>
+  
+     <div class="w-full flex flex-col justify-between gap-2  py-4 text-sm mt-12 md:flex-row md:gap-0 md:items-center md:text-[20px]">
+    <p class="text-left w-full md:w-auto">Rumah Homes, 2025</p>
+    <div class="flex items-center space-x-2">
+      <span>
+        <Image
+            src={Earth}
+            alt="Annas lodge"
+            />
+      </span>
+      <span>English</span>
+    </div>
+  </div>
+      
+      
+      
+  </footer>
+  
