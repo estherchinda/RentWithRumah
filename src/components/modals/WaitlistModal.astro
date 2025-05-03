@@ -166,7 +166,7 @@ let isLoading = false;
         }
         
         // Email doesn't exist, so insert it
-        console.log("Inserting new email:", email);
+        // console.log("Inserting new email:", email);
         const { error: insertError } = await supabase
           .from("waitlist")
           .insert([{ email: email }]);
