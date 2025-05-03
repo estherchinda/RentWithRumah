@@ -1,0 +1,49 @@
+---
+import icon1 from "../assets/icon1.png";
+import icon2 from "../assets/icon2.png";
+import icon3 from "../assets/icon3.png";
+import FadeIn from "./FadeInWrapper";
+import { Image } from "astro:assets";
+
+const cards = [
+    {
+        icon: icon1,
+        title: "Excellence in action",
+        description:
+        "We pioneered user research automation and haven't stopped innovating  since. Our platform combines powerful capabilities with intuitive  design, making expert research accessible to all.",
+    },
+    {
+        icon: icon2,
+        title: "Expertise that empowers",
+        description:
+        "We pioneered user research automation and haven't stopped innovating  since. Our platform combines powerful capabilities with intuitive  design, making expert research accessible to all.",
+    },
+    {
+        icon: icon3,
+        title: "Inclusive by design",
+        description:
+        "We pioneered user research automation and haven't stopped innovating  since. Our platform combines powerful capabilities with intuitive  design, making expert research accessible to all.",
+    },
+]
+---
+
+<section class="p-[40px] md:p-[50px] lg:p-[100px]">
+    <h2 class="font-bold text-4xl text-black text-center">What sets us apart</h2>
+    <div class="my-[50px] flex flex-col md:flex-col lg:flex-row justify-center items-center gap-[50px]">
+        {cards.map((card, index) => (
+            <FadeIn client:load duration={index * 100 + 300}>
+                <div class="flex flex-col justify-between items-start w-[327px] h-[311px] border border-[#E3E3E3] rounded-[23px] p-8 hover:cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                    <div class="w-[50px] h-[50px] mb-4">
+                        <Image
+                            src={card.icon}
+                            alt={card.title}
+                            class="w-full h-full object-cover"
+                        />
+                    </div>
+                    <h3 class="font-semibold leading-9 text-[26px]">{card.title}</h3>
+                    <p class="font-light text-[12px] leading-[18px] text-black">{card.description}</p>
+                </div>
+            </FadeIn>
+        ))}
+    </div>
+</section>

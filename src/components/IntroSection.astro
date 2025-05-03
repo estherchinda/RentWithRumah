@@ -1,15 +1,21 @@
 ---
-
+import FadeIn from "./FadeInWrapper"
 ---
 
 
 <div class="relative w-full h-[500px] bg-[#FDF9ED] md:h-[715px]">
     <div class="flex justify-center ">
         <section class="flex flex-col mt-20 gap-6 tracking-tight text-center md:mt-32 " >
-            <span class="text-sm md:text-[24px]">What do we do ?</span>
-            <h1 class="text-[35px] font-medium leading-[45px] tracking-tight md:text-[58px] md:leading-[65px]">A platform that <br class="md:hidden"/> helps<br class="hidden sm:block" />
-                 people  <br class="md:hidden"/> access a new <br class="hidden sm:block" /> <br class="md:hidden"/> home or apartment.</h1>
-            <p class="text-[13px] md:text-[20px]">We produce high-performance, compact homes <br /> that let you escape the everyday to a space that is <br /> good for you and good for the planet.</p>
+            <FadeIn client:load duration={100}>
+                <span class="text-sm md:text-[24px]">What do we do ?</span>
+            </FadeIn>
+            <FadeIn client:load duration={200}>
+                <h1 class="text-[35px] font-medium leading-[45px] tracking-tight md:text-[58px] md:leading-[65px]">A platform that <br class="md:hidden"/> helps<br class="hidden sm:block" />
+                     people  <br class="md:hidden"/> access a new <br class="hidden sm:block" /> <br class="md:hidden"/> home or apartment.</h1>
+            </FadeIn>
+            <FadeIn client:load duration={300}>
+                <p class="text-[13px] md:text-[20px]">We produce high-performance, compact homes <br /> that let you escape the everyday to a space that is <br /> good for you and good for the planet.</p>
+            </FadeIn>
         </section>
     </div>
 </div>

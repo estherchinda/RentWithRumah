@@ -1,0 +1,36 @@
+---
+import Story1 from "../assets/story1.png";
+import Story2 from "../assets/story2.png";
+import FadeIn from "./FadeInWrapper";
+import { Image } from "astro:assets";
+---
+
+ <!-- image on smaller screen -->
+ <div>
+    <Image src={Story1} alt="Story image 1" class="w-full h-[483px] object-cover block lg:hidden"/>
+  </div>
+
+  <!-- on big screen -->
+  <div class="grid lg:grid-cols-2 lg:gap-[100px] items-center px-[40px] md:px-[50px] lg:px-[100px]">
+    <div class="space-y-[50px]">
+      <Image src={Story1} alt="Story image 1" class="w-[419px] 2xl:w-full h-[338px] object-cover mr-[50px] hidden lg:block"/>
+      <FadeIn client:load duration={400}>
+          <Image src={Story2} alt="Story image 2" class="w-[419px] 2xl:w-full h-[483px] object-cover ml-[50px] hidden lg:block"/>
+      </FadeIn>
+    </div>
+    <FadeIn client:load duration={300}>
+        <div class="mt-10">
+          <h2 class="font-bold text-4xl text-black">Our Story</h2>
+          <div class="font-normal text-[17px] leading-[31px] text-[#6B6B6B] mt-10 space-y-[40px]">
+            <p>In 2013, Eido Gal and Assaf Feldman founded Rumah with the aim of enhancing the ecommerce experience for both merchants and consumers. As the landscape of shopping underwent significant transformations,  traditional methods struggled to adapt. Their conviction in a more  tech-forward approach drove them forward.</p>
+            <p>Rumah is a pioneer in using AI to fight fraud, leveraging big  data and machine learning to approve more orders that merchants might  otherwise decline. We now also protect customers from malicious account  takeover attacks, combat payment failures at checkout, help merchants  block abuse while upholding consumer-friendly policies, and more.</p>
+            <p>Our global team merges expertise in ecommerce fraud, payments, and  customer insights to support pioneering ecommerce merchants worldwide.  We help eliminate risk and uncertainty from their operations, empowering them to thrive in the ever-evolving digital landscape.</p>
+          </div>
+        </div>
+    </FadeIn>
+  </div>
+
+  <!-- second image on smaller screen -->
+  <div>
+    <Image src={Story2} alt="Story image 2" class="w-full h-[483px] object-cover block lg:hidden mt-10"/>
+  </div>
