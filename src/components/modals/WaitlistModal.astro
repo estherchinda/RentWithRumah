@@ -1,10 +1,12 @@
 ---
-
+// This is the Astro component file
+let isLoading = false;
 ---
 
 <div id="modal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
   <div class="bg-[#FDF9ED] rounded-lg w-full max-w-md p-6 relative">
     <button id="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-black text-xl">✖</button>
+    
     <div class="flex flex-col items-center text-center gap-4">
       <img src="/logo.png" alt="Logo" class="w-12 h-12" />
       <h2 class="text-xl font-semibold">Join the waitlist</h2>
@@ -12,22 +14,205 @@
         Be the first to know when the product is released!<br />
         (Don't miss out on exclusive discounts on launch!)
       </p>
-      <form class="w-full flex flex-col gap-3">
+      
+      <form id="waitlistForm" class="w-full flex flex-col gap-3">
         <label class="text-left text-sm font-medium">Email</label>
-        <input type="email" placeholder="john@email.com" class="border rounded px-4 py-2 w-full" />
-        <button type="submit" class="bg-[#445B38] text-[#FDF9ED] font-semibold py-2 rounded">
-          Subscribe
+        <input 
+          type="email" 
+          placeholder="john@email.com"
+          name="email" 
+          class="border rounded px-4 py-2 w-full"
+          required
+        />
+        
+        <div id="messageContainer" class="text-sm hidden">
+          <p id="errorMessage" class="text-red-500 hidden"></p>
+          <p id="successMessage" class="text-green-600 hidden"></p>
+        </div>
+        
+        <button 
+          type="submit" 
+          id="submitButton"
+          class="bg-[#445B38] text-[#FDF9ED] font-semibold py-2 rounded flex items-center justify-center"
+        >
+          <span id="buttonText">Subscribe</span>
+          <svg id="loadingSpinner" class="w-5 h-5 ml-2 hidden animate-spin" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
         </button>
       </form>
     </div>
   </div>
 </div>
 
-<script is:inline>
-  const openBtn = document.getElementById("openModal");
-  const closeBtn = document.getElementById("closeModal");
-  const modal = document.getElementById("modal");
+<!-- Load Supabase from CDN -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  openBtn?.addEventListener("click", () => modal.classList.remove("hidden"));
-  closeBtn?.addEventListener("click", () => modal.classList.add("hidden"));
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    const supabaseUrl = 'https://ngusntfvdltlqhndxzdt.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ndXNudGZ2ZGx0bHFobmR4emR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYyODAxNzgsImV4cCI6MjA2MTg1NjE3OH0.I2-5sQzxE4o6AKGSddcTJrEtZ-sq7t59VqEew4rAKPQ';
+
+    let supabase = null;
+    try {
+      if (typeof supabaseClient !== 'undefined') {
+        supabase = supabaseClient.createClient(supabaseUrl, supabaseAnonKey);
+      } else if (typeof window.supabase !== 'undefined') {
+        supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+      } else {
+        console.error("Supabase client not available. Make sure the CDN script is loaded properly.");
+      }
+    } catch (e) {
+      console.error("Error initializing Supabase client:", e);
+    }
+
+    const modal = document.getElementById("modal");
+    const openBtn = document.getElementById("openModal");
+    const closeBtn = document.getElementById("closeModal");
+    const form = document.getElementById("waitlistForm");
+    const submitButton = document.getElementById("submitButton");
+    const buttonText = document.getElementById("buttonText");
+    const loadingSpinner = document.getElementById("loadingSpinner");
+    const messageContainer = document.getElementById("messageContainer");
+    const errorMessage = document.getElementById("errorMessage");
+    const successMessage = document.getElementById("successMessage");
+
+    if (!modal || !form) {
+      console.error("Required DOM elements not found!");
+      return;
+    }
+
+    function openModal() {
+      if (modal) modal.classList.remove("hidden");
+    }
+
+    function closeModal() {
+      if (modal) modal.classList.add("hidden");
+      resetForm();
+    }
+
+    if (openBtn) openBtn.addEventListener("click", openModal);
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+    if (modal) {
+      modal.addEventListener("click", function(e) {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    function setLoading(isLoading) {
+      if (!submitButton || !buttonText || !loadingSpinner) return;
+
+      submitButton.disabled = isLoading;
+      buttonText.textContent = isLoading ? "Processing..." : "Subscribe";
+      loadingSpinner.classList.toggle("hidden", !isLoading);
+    }
+
+    function showMessage(type, text) {
+      if (!messageContainer || !errorMessage || !successMessage) return;
+
+      messageContainer.classList.remove("hidden");
+      if (type === "success") {
+        successMessage.textContent = text;
+        successMessage.classList.remove("hidden");
+        errorMessage.classList.add("hidden");
+      } else {
+        errorMessage.textContent = text;
+        errorMessage.classList.remove("hidden");
+        successMessage.classList.add("hidden");
+      }
+    }
+
+    function resetForm() {
+      if (form) form.reset();
+      if (messageContainer) messageContainer.classList.add("hidden");
+      if (errorMessage) errorMessage.classList.add("hidden");
+      if (successMessage) successMessage.classList.add("hidden");
+    }
+
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    // Handle waitlist submission
+    async function handleWaitlistSubmission(email) {
+      if (!supabase) {
+        showMessage("error", "Supabase client not initialized. Please refresh the page and try again.");
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        // Check if email already exists
+        const { data, error: fetchError } = await supabase
+          .from("waitlist")
+          .select("email")
+          .eq("email", email)
+          .maybeSingle();
+        
+        if (fetchError) {
+          throw new Error(fetchError.message || "Error checking email");
+        }
+        
+        // Very important: Check if the email already exists
+        // data will be null if no record was found, otherwise it contains the record
+        if (data && data.email) {
+          console.log("Email already exists:", data);
+          showMessage("success", "You're already on the waitlist!");
+          setTimeout(closeModal, 2000);
+          setLoading(false);
+          return;
+        }
+        
+        // Email doesn't exist, so insert it
+        console.log("Inserting new email:", email);
+        const { error: insertError } = await supabase
+          .from("waitlist")
+          .insert([{ email: email }]);
+        
+        if (insertError) {
+          // If we still get a unique constraint error, handle it gracefully
+          if (insertError.code === '23505' || insertError.message.includes('duplicate key')) {
+            // console.log("Caught duplicate key at insert time");
+            showMessage("success", "You're already on our waitlist!");
+            setTimeout(closeModal, 2000);
+            return;
+          }
+          throw new Error(insertError.message || "Error adding email");
+        }
+        
+        showMessage("success", "You've been added to the waitlist!");
+        setTimeout(closeModal, 2000);
+        
+      } catch (err) {
+        console.error("Supabase error:", err);
+        
+        // Additional check for duplicate key in catch block
+        if (err.message && (err.message.includes('duplicate key') || err.code === '23505')) {
+          showMessage("success", "You're already on the waitlist!");
+          setTimeout(closeModal, 2000);
+        } else {
+          showMessage("error", "Something went wrong. Please try again later.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (form) {
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const emailInput = form.querySelector("input[name='email']");
+        const email = emailInput?.value.trim() || "";
+
+        if (!email) return showMessage("error", "Please enter your email address");
+        if (!isValidEmail(email)) return showMessage("error", "Please enter a valid email address");
+
+        setLoading(true);
+        handleWaitlistSubmission(email);
+      });
+    }
+  });
 </script>
