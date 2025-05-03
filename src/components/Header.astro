@@ -12,7 +12,7 @@ const isAbout = Astro.url.pathname === "/about";
     <img 
       src="/logo.png" 
       alt="Rumah Logo" 
-      class={`w-16 h-16 p-1 rounded-full ${isAbout ? 'border border-black' : ''}`} 
+      class={`w-16 h-16 p-1 rounded-full ${isAbout ? 'border border-white' : ''}`} 
     />
     {!isAbout && (
       <span class="hidden md:inline">
@@ -22,7 +22,7 @@ const isAbout = Astro.url.pathname === "/about";
   </a>
 
   <!-- Desktop Navigation -->
-  <ul class={`hidden pr-12 md:flex items-center gap-12 text-[17px] ${isAbout ? 'text-black' : 'text-white'}`}>
+  <ul class={`hidden pr-12 md:flex items-center gap-12 text-[17px] ${isAbout ? 'text-white' : 'text-white'}`}>
     <li><a href="#">Explore</a></li>
     <li><a href="#">Careers</a></li>
     <li><a href="/about">About Us</a></li>
@@ -30,9 +30,9 @@ const isAbout = Astro.url.pathname === "/about";
 
   <!-- Hamburger Button -->
   <button id="hamburger-btn" class="flex flex-col gap-1 md:hidden">
-    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-black' : 'bg-white'}`}></span>
-    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-black' : 'bg-white'}`}></span>
-    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-black' : 'bg-white'}`}></span>
+    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-white' : 'bg-white'}`}></span>
+    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-white' : 'bg-white'}`}></span>
+    <span class={`block w-6 h-0.5 ${isAbout ? 'bg-white' : 'bg-white'}`}></span>
   </button>
 
   <!-- Mobile Menu -->

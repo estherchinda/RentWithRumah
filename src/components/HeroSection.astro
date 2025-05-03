@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import Rectangle from "../assets/Rectangle.png";
 import RectangleBigger from "../assets/Rectangle-bigger.png";
+import FadeIn from "./FadeInWrapper";
 ---
 
 <section class="relative w-full h-[722px]">
@@ -21,16 +22,20 @@ import RectangleBigger from "../assets/Rectangle-bigger.png";
   <div
     class="relative z-10 leading-[58px] tracking-[-0.05px] flex flex-col justify-center items-center h-full text-center px-4 text-white"
   >
-    <h1 class="text-[58px] font-[400] tracking-[-1.6px] leading-[58px] md:w-full md:text-[66px]">
-      A home is
-      <span class="block md:inline"> just a call</span>
-      <span class="block md:inline"> away.</span>
-    </h1>
+    <FadeIn client:load duration={100}>
+      <h1 class="text-[58px] font-[400] tracking-[-1.6px] leading-[58px] md:w-full md:text-[66px]">
+        A home is
+        <span class="block md:inline"> just a call</span>
+        <span class="block md:inline"> away.</span>
+      </h1>
+    </FadeIn>
 
-    <p class="mt-6 w-4/5 font-light leading-tight text-[17px] md:text-[21px]">
-      Get connected to a certified <br class="block md:hidden" />
-      agent faster and explore <br />
-      listings that match your budget.
-    </p>
+    <FadeIn client:load duration={250}>
+      <p class="mt-6 font-light leading-tight text-[17px] md:text-[21px]">
+        Get connected to a certified <br class="block md:hidden" />
+        agent faster and explore <br />
+        listings that match your budget.
+      </p>
+    </FadeIn>
   </div>
 </section>

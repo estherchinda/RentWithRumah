@@ -1,37 +1,181 @@
 ---
-import Landscape from '../assets/landscape-bg.png';
+import Landscape1 from '../assets/landscape-bg.png';
+import Landscape2 from "../assets/landscape2.jpg";
+import Landscape3 from "../assets/landspace3.jpg";
 import { Image } from "astro:assets";
+import FadeIn from "./FadeInWrapper";
+
+const carouselImages = [
+  {
+    src: Landscape1,
+    alt: "Image 1",
+  },
+  {
+    src: Landscape2,
+    alt: "Image 2",
+  },
+  {
+    src: Landscape3,
+    alt: "Image 3",
+  },
+];
 ---
 
 <div class="relative w-full bg-white py-20">
   <section class="flex flex-col items-center justify-center gap-6 text-center px-4">
-    <h1 class="text-[35px] font-medium leading-[45px] tracking-tight md:text-[58px]">
-      The power of variety
-    </h1>
+    <FadeIn client:load duration={150}>
+      <h1 class="text-[35px] font-medium leading-[45px] tracking-tight md:text-[58px]">
+        The power of variety
+      </h1>
+    </FadeIn>
 
-    <span class="text-[16px] text-[#A3A3A3] md:text-[24px] leading-relaxed">
-      Find your choices based on color,
-      <br class="md:hidden" />
-      ambience and residency, with lower
-      <br />
-      budget and easier systems at your
-      <br class="md:hidden" /> doorstep.
-    </span>
+    <FadeIn client:load duration={200}>
+      <span class="text-[16px] text-[#A3A3A3] md:text-[24px] leading-relaxed">
+        Find your choices based on color,
+        <br class="md:hidden" />
+        ambience and residency, with lower
+        <br />
+        budget and easier systems at your
+        <br class="md:hidden" /> doorstep.
+      </span>
+    </FadeIn>
 
-    <div class="relative w-[342px]  h-[512px] overflow-hidden rounded-[18px] md:w-[1066px] md:h-[612px]">
-      <Image
-        src={Landscape}
-        alt="Desktop hero background"
-        class="w-full h-full object-cover rounded-[20px]"
-      />
-    </div>
-    
+    <FadeIn client:load duration={350}>
+      <div class="relative w-full carousel-container overflow-hidden my-4 md:my-8">
+        <!-- Carousel Track -->
+        <div class="relative w-full overflow-hidden mx-auto">
+          <div class="carousel-track flex transition-transform duration-700 ease-in-out">
+            {carouselImages.map((item) => (
+              <div class="carousel-item w-full flex-shrink-0 flex flex-col items-center text-center px-4">
+                <div class="relative w-full max-w-md md:max-w-4xl mx-auto">
+                  <div class="relative w-full aspect-[2/3] md:aspect-[16/9] overflow-hidden rounded-lg">
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      
+        <!-- Indicators -->
+        <div class="flex justify-center space-x-2 mt-4">
+          {carouselImages.map((_, index) => (
+            <button class={`carousel-indicator w-2 h-2 rounded-full transition-all duration-300 ${index === 0 ? "bg-green-500 w-3" : "bg-gray-300"}`} data-index={index} aria-label={`Go to slide ${index + 1}`}></button>
+          ))}
+        </div>
+      </div>
+    </FadeIn>
 
-    <!-- Slide Indicators -->
-    <div class="flex justify-center space-x-2">
-      <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
-      <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-      <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
-    </div>
   </section>
 </div>
+
+<style>
+  .carousel-track {
+    display: flex;
+  }
+
+  .carousel-item {
+    flex: 0 0 100%;
+  }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const track = document.querySelector('.carousel-track') as HTMLElement;
+      const indicators = document.querySelectorAll('.carousel-indicator');
+      const prevButton = document.querySelector('.carousel-prev');
+      const nextButton = document.querySelector('.carousel-next');
+      const container = document.querySelector('.carousel-container');
+      const totalSlides = indicators.length;
+      let currentIndex = 0;
+      let interval: number;
+      let isPaused = false;
+  
+      // For swipe
+      let touchStartX = 0;
+      let touchEndX = 0;
+      const swipeThreshold = 50; // minimum distance to be considered swipe
+  
+      function updateCarousel() {
+        if (track) {
+          track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+  
+        indicators.forEach((btn, i) => {
+          btn.classList.toggle('bg-green-500', i === currentIndex);
+          btn.classList.toggle('w-4', i === currentIndex);
+          btn.classList.toggle('bg-gray-300', i !== currentIndex);
+        });
+      }
+  
+      function goToSlide(index: number) {
+        currentIndex = (index + totalSlides) % totalSlides;
+        updateCarousel();
+      }
+  
+      function nextSlide() {
+        goToSlide(currentIndex + 1);
+      }
+  
+      function prevSlide() {
+        goToSlide(currentIndex - 1);
+      }
+  
+      // Controls
+      if (prevButton) {
+        prevButton.addEventListener('click', prevSlide);
+      }
+      if (nextButton){
+        nextButton.addEventListener('click', nextSlide);
+      }
+  
+      indicators.forEach((btn, i) => {
+        btn.addEventListener('click', () => goToSlide(i));
+      });
+  
+      // Autoplay
+      function startAutoplay() {
+        interval = setInterval(() => {
+          if (!isPaused) nextSlide();
+        }, 4000);
+      }
+      document.addEventListener('astro:before-swap', () => clearInterval(interval));
+  
+      // Swipe Events
+      if (container) {
+        container.addEventListener('touchstart', (e) => {
+          touchStartX = (e as TouchEvent).touches[0].clientX;
+        });
+      }
+
+      if (container) {
+        container.addEventListener('touchmove', (e) => {
+          touchEndX = (e as TouchEvent).touches[0].clientX;
+        });
+      }
+
+
+      if (container) {
+      container.addEventListener('touchend', () => {
+        const swipeDistance = touchStartX - touchEndX;
+        if (Math.abs(swipeDistance) > swipeThreshold) {
+          if (swipeDistance > 0) {
+            nextSlide(); // Swiped left
+          } else {
+            prevSlide(); // Swiped right
+          }
+        }
+      });
+      }
+  
+      // Init
+      updateCarousel();
+      startAutoplay();
+    });
+  </script>
+  
